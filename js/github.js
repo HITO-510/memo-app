@@ -60,6 +60,33 @@ class GitHubClient {
     return await res.json();
   }
 
+  /**
+   * Create a file from raw base64 content (for images).
+   */
+  async createFileRaw(fileName, base64Content, commitMessage) {
+    const filePath = `${this.basePath}/${fileName}`;
+    const body = {
+      message: commitMessage || `image: ${fileName}`,
+      content: base64Content,
+    };
+
+    const res = await fetch(
+      `${this.apiBase}/repos/${this.repo}/contents/${encodeURIComponent(filePath)}`,
+      {
+        method: 'PUT',
+        headers: { ...this.headers, 'Content-Type': 'application/json' },
+        body: JSON.stringify(body),
+      }
+    );
+
+    if (!res.ok) {
+      const err = await res.json().catch(() => ({}));
+      throw new Error(`画像保存エラー: ${res.status} ${err.message || ''}`);
+    }
+
+    return await res.json();
+  }
+
   encodeContent(text) {
     const bytes = new TextEncoder().encode(text);
     let binary = '';

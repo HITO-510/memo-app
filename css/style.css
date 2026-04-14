@@ -179,6 +179,49 @@ form small {
   color: var(--text-dark);
 }
 
+/* ---- Image Preview ---- */
+.image-preview-area {
+  padding: 8px 16px;
+  background: var(--navy);
+  border-top: 1px solid var(--border);
+}
+
+.image-preview-list {
+  display: flex;
+  gap: 8px;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+.image-preview-item {
+  position: relative;
+  flex-shrink: 0;
+}
+
+.image-preview-item img {
+  width: 64px;
+  height: 64px;
+  object-fit: cover;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border);
+}
+
+.image-remove-btn {
+  position: absolute;
+  top: -6px;
+  right: -6px;
+  width: 22px;
+  height: 22px;
+  background: var(--danger);
+  color: #fff;
+  border: none;
+  border-radius: 50%;
+  font-size: 12px;
+  line-height: 22px;
+  text-align: center;
+  cursor: pointer;
+}
+
 /* ---- Footer ---- */
 #app-footer {
   display: flex;
@@ -188,6 +231,12 @@ form small {
   padding-bottom: calc(12px + var(--safe-bottom));
   background: var(--navy);
   border-top: 1px solid var(--border);
+}
+
+.footer-left {
+  display: flex;
+  align-items: center;
+  gap: 8px;
 }
 
 .char-count {

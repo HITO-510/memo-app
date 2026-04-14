@@ -6,6 +6,7 @@
   'use strict';
 
   let github = null;
+  let pendingImages = []; // { file, dataUrl, base64 }
 
   const $ = (sel) => document.querySelector(sel);
   const dom = {
@@ -15,6 +16,10 @@
     memoInput: $('#memo-input'),
     btnSend: $('#btn-send'),
     charCount: $('#char-count'),
+    btnImage: $('#btn-image'),
+    imageInput: $('#image-input'),
+    imagePreviewArea: $('#image-preview-area'),
+    imagePreviewList: $('#image-preview-list'),
     loading: $('#loading'),
     loadingText: $('#loading-text'),
     toast: $('#toast'),
@@ -80,7 +85,8 @@
 
   function updateSendButton() {
     const hasText = dom.memoInput.value.trim().length > 0;
-    dom.btnSend.disabled = !hasText;
+    const hasImages = pendingImages.length > 0;
+    dom.btnSend.disabled = !hasText && !hasImages;
   }
 
   function updateCharCount() {
@@ -99,23 +105,79 @@
     return { dateTime: `${y}-${mo}-${d}_${h}${mi}`, captured: `${y}-${mo}-${d} ${h}:${mi}` };
   }
 
-  function buildMarkdown(body, captured) {
-    return `---\ncaptured: ${captured}\nsource: iPhone\n---\n\n${body}\n`;
+  function buildMarkdown(body, captured, imageLinks) {
+    let md = `---\ncaptured: ${captured}\nsource: iPhone\n---\n\n`;
+    if (body) md += `${body}\n`;
+    if (imageLinks.length > 0) {
+      md += '\n';
+      for (const img of imageLinks) {
+        md += `![${img.name}](${img.path})\n`;
+      }
+    }
+    return md;
+  }
+
+  // ---- Image Handling ----
+
+  function readFileAsBase64(file) {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onload = () => {
+        const dataUrl = reader.result;
+        const base64 = dataUrl.split(',')[1];
+        resolve({ file, dataUrl, base64 });
+      };
+      reader.onerror = reject;
+      reader.readAsDataURL(file);
+    });
+  }
+
+  function renderImagePreviews() {
+    if (pendingImages.length === 0) {
+      dom.imagePreviewArea.style.display = 'none';
+      dom.imagePreviewList.innerHTML = '';
+      return;
+    }
+    dom.imagePreviewArea.style.display = 'block';
+    dom.imagePreviewList.innerHTML = pendingImages.map((img, i) =>
+      `<div class="image-preview-item">
+        <img src="${img.dataUrl}" alt="">
+        <button class="image-remove-btn" data-index="${i}">✕</button>
+      </div>`
+    ).join('');
   }
 
   async function sendMemo() {
     const body = dom.memoInput.value.trim();
-    if (!body) return;
+    if (!body && pendingImages.length === 0) return;
 
     const now = new Date();
     const { dateTime, captured } = formatDateTime(now);
-    const fileName = `${dateTime}_メモ.md`;
-    const content = buildMarkdown(body, captured);
 
     showLoading();
     try {
+      // Upload images first
+      const imageLinks = [];
+      for (let i = 0; i < pendingImages.length; i++) {
+        const img = pendingImages[i];
+        const ext = img.file.name.split('.').pop().toLowerCase() || 'jpg';
+        const imgName = `${dateTime}_${i + 1}.${ext}`;
+        const imgPath = `images/${imgName}`;
+        showLoading(`画像を送信中 (${i + 1}/${pendingImages.length})...`);
+        await github.createFileRaw(imgPath, img.base64, `image: ${imgName}`);
+        imageLinks.push({ name: imgName, path: imgPath });
+      }
+
+      // Create memo file
+      const fileName = `${dateTime}_メモ.md`;
+      const content = buildMarkdown(body, captured, imageLinks);
+      showLoading('メモを送信中...');
       await github.createFile(fileName, content);
+
+      // Reset
       dom.memoInput.value = '';
+      pendingImages = [];
+      renderImagePreviews();
       updateSendButton();
       updateCharCount();
       hideLoading();
@@ -169,6 +231,32 @@
     dom.memoInput.addEventListener('input', () => {
       updateSendButton();
       updateCharCount();
+    });
+
+    // Image
+    dom.btnImage.addEventListener('click', () => dom.imageInput.click());
+    dom.imageInput.addEventListener('change', async (e) => {
+      const files = [...e.target.files];
+      if (!files.length) return;
+      for (const file of files) {
+        if (file.size > 10 * 1024 * 1024) {
+          showToast('10MBを超える画像は添付できません', 'error');
+          continue;
+        }
+        const img = await readFileAsBase64(file);
+        pendingImages.push(img);
+      }
+      renderImagePreviews();
+      updateSendButton();
+      dom.imageInput.value = '';
+    });
+    dom.imagePreviewList.addEventListener('click', (e) => {
+      const btn = e.target.closest('.image-remove-btn');
+      if (!btn) return;
+      const idx = parseInt(btn.dataset.index, 10);
+      pendingImages.splice(idx, 1);
+      renderImagePreviews();
+      updateSendButton();
     });
 
     // Send

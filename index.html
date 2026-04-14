@@ -50,8 +50,16 @@
       <textarea id="memo-input" placeholder="メモを入力..."></textarea>
     </main>
 
+    <div id="image-preview-area" class="image-preview-area" style="display:none;">
+      <div id="image-preview-list" class="image-preview-list"></div>
+    </div>
+
     <footer id="app-footer">
-      <span id="char-count" class="char-count">0文字</span>
+      <div class="footer-left">
+        <span id="char-count" class="char-count">0文字</span>
+        <input type="file" id="image-input" accept="image/*" multiple style="display:none;">
+        <button id="btn-image" class="icon-btn" aria-label="画像を追加">📷</button>
+      </div>
       <button id="btn-send" class="btn-send" disabled>📮 Inboxに投げる</button>
     </footer>
   </div>
