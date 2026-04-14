@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="theme-color" content="#1a2332">
+  <title>HITO Memo</title>
+  <link rel="manifest" href="manifest.json">
+  <link rel="apple-touch-icon" href="icons/icon-192.svg">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <!-- Setup Screen -->
+  <div id="setup-screen" class="screen" style="display:none;">
+    <div class="setup-container">
+      <h1>HITO Memo</h1>
+      <p class="setup-desc">Inboxにメモを投げ込みます。GitHubリポジトリと連携します。</p>
+      <form id="setup-form">
+        <label>
+          GitHub Personal Access Token
+          <input type="password" id="setup-token" required
+                 placeholder="ghp_xxxxxxxxxxxx">
+          <small>Settings → Developer settings → Fine-grained tokens で作成。Contents の Read and write 権限が必要です。</small>
+        </label>
+        <label>
+          リポジトリ（owner/repo）
+          <input type="text" id="setup-repo" required
+                 placeholder="例: HITO-510/HITO_Inc" value="HITO-510/HITO_Inc">
+        </label>
+        <label>
+          保存先フォルダ
+          <input type="text" id="setup-path" value="01_INBOX"
+                 placeholder="例: 01_INBOX">
+        </label>
+        <button type="submit" class="btn-primary">接続する</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- Main App -->
+  <div id="app" class="screen" style="display:none;">
+    <header id="app-header">
+      <h1 class="app-title">HITO Memo</h1>
+      <button id="btn-settings" class="icon-btn" aria-label="設定">⚙</button>
+    </header>
+
+    <main id="main-content">
+      <textarea id="memo-input" placeholder="メモを入力..."></textarea>
+    </main>
+
+    <footer id="app-footer">
+      <span id="char-count" class="char-count">0文字</span>
+      <button id="btn-send" class="btn-send" disabled>📮 Inboxに投げる</button>
+    </footer>
+  </div>
+
+  <!-- Settings Modal -->
+  <div id="settings-modal" class="modal" style="display:none;">
+    <div class="modal-content settings-content">
+      <div class="settings-header">
+        <button id="btn-settings-back" class="icon-btn">← 戻る</button>
+        <h2>設定</h2>
+        <span></span>
+      </div>
+      <form id="settings-form">
+        <label>
+          GitHub Token
+          <input type="password" id="settings-token">
+        </label>
+        <label>
+          リポジトリ
+          <input type="text" id="settings-repo">
+        </label>
+        <label>
+          保存先フォルダ
+          <input type="text" id="settings-path">
+        </label>
+        <button type="submit" class="btn-primary">保存</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- Loading Overlay -->
+  <div id="loading" class="loading-overlay" style="display:none;">
+    <div class="spinner"></div>
+    <p id="loading-text">送信中...</p>
+  </div>
+
+  <!-- Toast -->
+  <div id="toast" class="toast" style="display:none;"></div>
+
+  <script src="js/github.js"></script>
+  <script src="js/app.js"></script>
+  <script>
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('./sw.js').catch(() => {});
+    }
+  </script>
+</body>
+</html>
