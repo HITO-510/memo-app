@@ -149,7 +149,7 @@
       e.preventDefault();
       const token = $('#setup-token').value.trim();
       const repo = $('#setup-repo').value.trim();
-      const path = $('#setup-path').value.trim() || '01_INBOX';
+      const path = $('#setup-path').value.trim() || 'memos';
 
       showLoading('接続を確認中...');
       try {
@@ -189,7 +189,7 @@
       e.preventDefault();
       const token = $('#settings-token').value.trim();
       const repo = $('#settings-repo').value.trim();
-      const path = $('#settings-path').value.trim() || '01_INBOX';
+      const path = $('#settings-path').value.trim() || 'memos';
 
       showLoading('接続を確認中...');
       try {
