@@ -1,21 +1,23 @@
 /* ========================================
    HITO Memo - Style
-   Color: Navy (#1a2332) + Orange (#e8833a)
+   Color: Turquoise (#069A8E / IP Tier1) + Honey Gold (#D4A04A)
    ======================================== */
 
 :root {
-  --navy: #1a2332;
-  --navy-light: #243347;
-  --navy-lighter: #2d4059;
-  --orange: #e8833a;
-  --orange-light: #f09a5a;
+  --teal: #1F2A2B;
+  --teal-light: #2A3838;
+  --teal-lighter: #3F5A5C;
+  --turquoise: #069A8E;
+  --turquoise-light: #0BB8A8;
+  --gold: #D4A04A;
+  --gold-light: #E0B563;
   --text: #e8e8e8;
   --text-muted: #8899aa;
   --text-dark: #556677;
-  --bg: #0f1923;
-  --bg-card: #1a2332;
-  --bg-input: #243347;
-  --border: #2d4059;
+  --bg: #162020;
+  --bg-card: #1F2A2B;
+  --bg-input: #2A3838;
+  --border: #3F5A5C;
   --success: #4caf82;
   --danger: #e85555;
   --radius: 12px;
@@ -60,7 +62,7 @@ body {
 
 .setup-container h1 {
   font-size: 28px;
-  color: var(--orange);
+  color: var(--gold);
   margin-bottom: 8px;
 }
 
@@ -92,7 +94,7 @@ form input[type="password"] {
 }
 
 form input:focus {
-  border-color: var(--orange);
+  border-color: var(--turquoise);
 }
 
 form small {
@@ -107,7 +109,7 @@ form small {
 .btn-primary {
   display: inline-block;
   padding: 12px 28px;
-  background: var(--orange);
+  background: var(--turquoise);
   color: #fff;
   border: none;
   border-radius: var(--radius-sm);
@@ -118,7 +120,7 @@ form small {
 }
 
 .btn-primary:hover {
-  background: var(--orange-light);
+  background: var(--turquoise-light);
 }
 
 .icon-btn {
@@ -133,7 +135,7 @@ form small {
 }
 
 .icon-btn:hover {
-  background: var(--navy-light);
+  background: var(--teal-light);
 }
 
 /* ---- Header ---- */
@@ -143,14 +145,14 @@ form small {
   align-items: center;
   padding: 12px 16px;
   padding-top: calc(12px + var(--safe-top));
-  background: var(--navy);
+  background: var(--teal);
   border-bottom: 1px solid var(--border);
 }
 
 .app-title {
   font-size: 18px;
   font-weight: 700;
-  color: var(--orange);
+  color: var(--gold);
 }
 
 /* ---- Main Content (Textarea) ---- */
@@ -182,7 +184,7 @@ form small {
 /* ---- Image Preview ---- */
 .image-preview-area {
   padding: 8px 16px;
-  background: var(--navy);
+  background: var(--teal);
   border-top: 1px solid var(--border);
 }
 
@@ -229,7 +231,7 @@ form small {
   justify-content: space-between;
   padding: 12px 16px;
   padding-bottom: calc(12px + var(--safe-bottom));
-  background: var(--navy);
+  background: var(--teal);
   border-top: 1px solid var(--border);
 }
 
@@ -246,7 +248,7 @@ form small {
 
 .btn-send {
   padding: 10px 24px;
-  background: var(--orange);
+  background: var(--turquoise);
   color: #fff;
   border: none;
   border-radius: var(--radius-sm);
@@ -257,7 +259,7 @@ form small {
 }
 
 .btn-send:hover {
-  background: var(--orange-light);
+  background: var(--turquoise-light);
 }
 
 .btn-send:disabled {
@@ -290,7 +292,7 @@ form small {
   justify-content: space-between;
   padding: 12px 16px;
   padding-top: calc(12px + var(--safe-top));
-  background: var(--navy);
+  background: var(--teal);
   border-bottom: 1px solid var(--border);
 }
 
@@ -309,7 +311,7 @@ form small {
 .loading-overlay {
   position: fixed;
   inset: 0;
-  background: rgba(15, 25, 35, 0.85);
+  background: rgba(22, 32, 32, 0.85);
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -321,7 +323,7 @@ form small {
   width: 40px;
   height: 40px;
   border: 3px solid var(--border);
-  border-top-color: var(--orange);
+  border-top-color: var(--turquoise);
   border-radius: 50%;
   animation: spin 0.8s linear infinite;
 }
@@ -342,7 +344,7 @@ form small {
   left: 50%;
   transform: translateX(-50%);
   padding: 12px 24px;
-  background: var(--navy-light);
+  background: var(--teal-light);
   border: 1px solid var(--border);
   border-radius: var(--radius);
   color: var(--text);
